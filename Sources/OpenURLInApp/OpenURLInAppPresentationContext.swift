@@ -9,12 +9,8 @@ struct OpenURLInAppPresentationContext: UIViewControllerRepresentable {
     }
     
     func updateUIViewController(_ uiViewController: PresentationContextViewController, context: Context) {
-        if let request {
-            uiViewController.openURLInApp(
-                request.url,
-                entersReaderIfAvailable: request.entersReaderIfAvailable
-            )
-        }
+        context.coordinator.presentationContext = uiViewController
+        context.coordinator.request = request
     }
     
     func sizeThatFits(
@@ -24,10 +20,28 @@ struct OpenURLInAppPresentationContext: UIViewControllerRepresentable {
     ) -> CGSize? {
         .zero
     }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+    
+    final class Coordinator {
+        weak var presentationContext: PresentationContextViewController? = nil
+        var request: OpenURLInAppRequest? {
+            didSet {
+                if let request, oldValue?.id != request.id {
+                    presentationContext?.presentSafariViewController(
+                        request.url,
+                        entersReaderIfAvailable: request.entersReaderIfAvailable
+                    )
+                }
+            }
+        }
+    }
 }
 
 final class PresentationContextViewController: UIViewController {
-    func openURLInApp(_ url: URL, entersReaderIfAvailable: Bool) {
+    func presentSafariViewController(_ url: URL, entersReaderIfAvailable: Bool) {
         let configuration = SFSafariViewController.Configuration()
         configuration.entersReaderIfAvailable = entersReaderIfAvailable
         let vc = SFSafariViewController(url: url, configuration: configuration)
