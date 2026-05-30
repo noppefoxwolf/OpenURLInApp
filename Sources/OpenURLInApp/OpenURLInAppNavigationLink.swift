@@ -1,7 +1,7 @@
 import SwiftUI
 import SafariServices
 
-struct OpenURLInAppNavigationLink: UIViewControllerRepresentable {
+struct OpenURLInAppPresentationContext: UIViewControllerRepresentable {
     let request: OpenURLInAppRequest?
     
     func makeUIViewController(context: Context) -> PresentationContextViewController {

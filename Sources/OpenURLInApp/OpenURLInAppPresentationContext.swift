@@ -5,7 +5,7 @@ struct OpenURLInAppPresentationModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content.overlay {
-            OpenURLInAppNavigationLink(request: request)
+            OpenURLInAppPresentationContext(request: request)
         }
     }
 }
