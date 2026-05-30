@@ -25,6 +25,13 @@ struct App: SwiftUI.App {
                 } label: {
                     Label("openURL", systemImage: "safari")
                 }
+                
+                Tab {
+                    Link("Open Link", destination: .article)
+                        .onOpenURL(prefersInAppReader: false)
+                } label: {
+                    Label("Link", systemImage: "link")
+                }
             }
         }
     }
@@ -36,8 +43,7 @@ struct OpenURLContentView: View {
     
     var body: some View {
         Button {
-            let url = URL(string: "https://www.apple.com/jp/newsroom/2026/05/apple-sports-expands-to-more-than-90-new-countries-and-regions/")!
-            openURL(url)
+            openURL(.article)
         } label: {
             Text("Open Apple website")
         }
@@ -54,8 +60,7 @@ struct OpenURLInAppContentView: View {
     var body: some View {
         VStack {
             Button {
-                let url = URL(string: "https://www.apple.com/jp/newsroom/2026/05/apple-sports-expands-to-more-than-90-new-countries-and-regions/")!
-                openURLInApp(url, prefersInAppReader: prefersInAppReader)
+                openURLInApp(.article, prefersInAppReader: prefersInAppReader)
             } label: {
                 Text("Open Apple website")
             }
@@ -64,3 +69,8 @@ struct OpenURLInAppContentView: View {
     }
 }
 
+extension URL {
+    static var article: URL {
+        URL(string: "https://www.apple.com/jp/newsroom/2026/05/apple-sports-expands-to-more-than-90-new-countries-and-regions/")!
+    }
+}
