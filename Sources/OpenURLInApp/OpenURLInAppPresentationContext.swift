@@ -1,5 +1,6 @@
 import SwiftUI
 import SafariServices
+import UIKit
 
 struct OpenURLInAppPresentationContext: UIViewControllerRepresentable {
     let request: OpenURLInAppRequest?
@@ -42,6 +43,13 @@ struct OpenURLInAppPresentationContext: UIViewControllerRepresentable {
 
 final class PresentationContextViewController: UIViewController {
     func presentSafariViewController(_ url: URL, entersReaderIfAvailable: Bool) {
+        guard let scheme = url.scheme?.lowercased(), scheme == "http" || scheme == "https" else {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            return
+        }
+
+        // SFSafariViewController only supports initial URLs with http or https schemes.
+        // https://developer.apple.com/documentation/safariservices/sfsafariviewcontroller/init(url:configuration:)
         let configuration = SFSafariViewController.Configuration()
         configuration.entersReaderIfAvailable = entersReaderIfAvailable
         let vc = SFSafariViewController(url: url, configuration: configuration)
